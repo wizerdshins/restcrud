@@ -1,18 +1,21 @@
 package com.wizerdshins.restcrud.controller;
 
+import com.wizerdshins.restcrud.domain.Comment;
 import com.wizerdshins.restcrud.domain.Task;
+import com.wizerdshins.restcrud.repository.CommentRepository;
 import com.wizerdshins.restcrud.repository.TaskRepository;
 import com.wizerdshins.restcrud.service.TaskService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
@@ -21,24 +24,19 @@ public class MainController {
     private TaskRepository taskRepository;
     private TaskService service;
 
-    public MainController(TaskRepository taskRepository, TaskService service) {
+    private Task tempTask;
+
+    private CommentRepository commentRepository;
+
+    public MainController(TaskRepository taskRepository, TaskService service, CommentRepository commentRepository) {
         this.taskRepository = taskRepository;
         this.service = service;
+        this.commentRepository = commentRepository;
     }
 
     /*
     TODO replace by service methods
      */
-
-//    @GetMapping
-//    public Page<Task> showAll(@PageableDefault Pageable pageable) {
-//        return taskRepository.findAll(pageable);
-//    }
-
-//    @GetMapping
-//    public List<Task> showAll() {
-//        return taskRepository.findAll();
-//    }
 
     @GetMapping
     public String showAll(Model model) {
@@ -54,8 +52,6 @@ public class MainController {
         Task updatedTask = taskRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("Error, motherfucker!"));
         model.addAttribute("task", updatedTask);
-//        System.out.println(updatedTask.getDescription());
-//        System.out.println(updatedTask.getStatus());
         return "update_status";
 
 //        if (id.isPresent()) {
@@ -65,21 +61,6 @@ public class MainController {
 //            model.addAttribute("task", new Task(""));
 //        }
 //        return "add-edit-task";
-    }
-
-    /*
-    TODO put in service methods
-     */
-    @RequestMapping(path = "/update/{id}",
-            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
-            method = RequestMethod.POST)
-    public String update(long id, Task task, String status) {
-        Task updatedTask = taskRepository.getOne(id);
-        updatedTask.setStatus(status);
-        System.out.println(updatedTask.getDescription());
-        System.out.println(updatedTask.getStatus());
-        taskRepository.save(updatedTask);
-        return "redirect:/";
     }
 
     @GetMapping("new")
@@ -95,10 +76,17 @@ public class MainController {
         return "redirect:/";
     }
 
-//    @DeleteMapping("delete/{id}")
-//    public void delete(@PathVariable("id") Task deleteTask) {
-//        taskRepository.delete(deleteTask);
-//    }
+    @RequestMapping(path = "/update/{id}",
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+            method = RequestMethod.POST)
+    public String update(long id, Task task, String status) {
+        Task updatedTask = taskRepository.getOne(id);
+        updatedTask.setStatus(status);
+        System.out.println(updatedTask.getDescription());
+        System.out.println(updatedTask.getStatus());
+        taskRepository.save(updatedTask);
+        return "redirect:/";
+    }
 
     @GetMapping(path = "delete/{id}")
     public String delete(@PathVariable("id") long id, Model model) {
@@ -110,7 +98,33 @@ public class MainController {
     }
 
     /*
-    TODO add methods for updating status and comments
+    methods for adding comments
      */
+
+    @GetMapping(path = "get_comments/{id}")
+    public String showComments(@PathVariable("id") long id, Model model) {
+        Task task = taskRepository.getOne(id);
+        tempTask = task;
+        List<Comment> listComments = task.getComments();
+        System.out.println(task);
+        model.addAttribute("comments", listComments);
+        return "show_comments";
+    }
+
+    @GetMapping(path = "comment_form")
+    public String getCommentForm(Comment comment) {
+        return "add_comments";
+    }
+
+    @Transactional
+    @RequestMapping(path = "/comment",
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+            method = RequestMethod.POST)
+    public String comment(Comment comment) {
+        comment.setTask(tempTask);
+        commentRepository.save(comment);
+        System.out.println(comment);
+        return "redirect:/";
+    }
 
 }

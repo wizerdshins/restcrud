@@ -5,14 +5,16 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+//@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity
 public class Task {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private String description;
@@ -35,5 +37,10 @@ public class Task {
         this.status = "New"; // TODO remove by enum or something like that
     }
 
+
+    @Override
+    public String toString() {
+        return id + " : " + description;
+    }
 
 }

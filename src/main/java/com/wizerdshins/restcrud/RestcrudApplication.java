@@ -1,7 +1,9 @@
 package com.wizerdshins.restcrud;
 
 import com.wizerdshins.restcrud.controller.MainController;
+import com.wizerdshins.restcrud.domain.Comment;
 import com.wizerdshins.restcrud.domain.Task;
+import com.wizerdshins.restcrud.repository.CommentRepository;
 import com.wizerdshins.restcrud.repository.TaskRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,7 +18,7 @@ public class RestcrudApplication {
     }
 
     @Bean
-    public CommandLineRunner runner(TaskRepository taskRepository) {
+    public CommandLineRunner runner(TaskRepository taskRepository, CommentRepository commentRepository) {
         return (args -> {
 
             taskRepository.save(new Task("This is task description"));

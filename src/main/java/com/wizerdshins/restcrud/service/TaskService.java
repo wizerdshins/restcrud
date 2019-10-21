@@ -1,6 +1,8 @@
 package com.wizerdshins.restcrud.service;
 
+import com.wizerdshins.restcrud.domain.Comment;
 import com.wizerdshins.restcrud.domain.Task;
+import com.wizerdshins.restcrud.repository.CommentRepository;
 import com.wizerdshins.restcrud.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
