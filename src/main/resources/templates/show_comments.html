@@ -27,21 +27,12 @@
                             <tr>
                                 <th>Number</th>
                                 <th>Text</th>
-                                <!--<th>Task's Number</th>-->
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:each="comment : ${comments}">
                                 <td th:text="${comment.id}"></td>
                                 <td th:text="${comment.text}"></td>
-                                <!--<td th:text="${comment.task.id}"></td>-->
-
-                                <!--<td>-->
-                                    <!--<a th:href="@{/delete/{id}(id=${task.id})}"-->
-                                       <!--class="btn btn-primary">-->
-                                        <!--<i class="fas fa-user-times ml-2"></i>-->
-                                    <!--</a>-->
-                                <!--</td>-->
                             </tr>
                             </tbody>
                         </table>

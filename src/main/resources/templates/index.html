@@ -40,15 +40,6 @@
                                 <td th:text="${task.description}"></td>
                                 <td th:text="${task.status}"></td>
                                 <td th:text="${task.comments}"></td>
-                                <!--<td>-->
-                                    <!--<select class="form-control" id="comment" name="comment">-->
-                                        <!--<option value="">Comments</option>-->
-                                        <!--<option th:each="comment : ${comments}"-->
-                                        <!--th:value="${comment.id}"-->
-                                        <!--th:text="${comment.id}+' : '+${comment.text}"></option>-->
-                                    <!--</select>-->
-                                <!--</td>-->
-
                                 <td>
                                     <a th:href="@{/edit/{id}(id=${task.id})}"
                                        class="btn btn-primary">
@@ -62,10 +53,10 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <!--<a th:href="@{/comments/{id}(id=${task.id})}"-->
                                     <a th:href="@{/get_comments/{id}(id=${task.id})}"
                                        class="btn btn-primary">
-                                        <i class="fas fa-user-times ml-2"></i>
+                                        <i class="fas fa-users ml-2"></i>
+
                                     </a>
                                 </td>
                             </tr>

@@ -1,17 +1,15 @@
 package com.wizerdshins.restcrud.service;
 
-import com.wizerdshins.restcrud.domain.Comment;
 import com.wizerdshins.restcrud.domain.Task;
-import com.wizerdshins.restcrud.repository.CommentRepository;
 import com.wizerdshins.restcrud.repository.TaskRepository;
-import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 @Service
 public class TaskService {
 
-    TaskRepository taskRepository;
+    private TaskRepository taskRepository;
 
     public TaskService(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
@@ -21,5 +19,18 @@ public class TaskService {
         task.setStatus("New");
         taskRepository.save(task);
     }
+
+    public void update(long id, String status) {
+
+        Task updatedTask = taskRepository.getOne(id);
+        updatedTask.setStatus(status);
+        taskRepository.save(updatedTask);
+    }
+
+    public void delete(long id) {
+        Task deletedTask = taskRepository.getOne(id);
+        taskRepository.delete(deletedTask);
+    }
+
 
 }

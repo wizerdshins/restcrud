@@ -5,7 +5,6 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.List;
 
-//@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -21,10 +20,6 @@ public class Task {
     @Column
     private String status;
 
-    /*
-    also list of comments will be here
-     */
-
     @OneToMany(
             mappedBy = "task",
             cascade = CascadeType.REMOVE,
@@ -37,6 +32,17 @@ public class Task {
         this.status = "New"; // TODO remove by enum or something like that
     }
 
+    public String getComments() {
+
+        StringBuilder builder = new StringBuilder();
+        if (comments.isEmpty()) return "No comments yet";
+        int index = 1;
+        for (Comment comment : comments) {
+            builder.append(index + ". " + comment + " ");
+            index++;
+        }
+        return builder.toString();
+    }
 
     @Override
     public String toString() {
